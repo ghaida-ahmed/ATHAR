@@ -26,7 +26,7 @@ NUMERIC_COLS = [
 EXPECTED_COLS = {"date", "region"} | set(NUMERIC_COLS)
 
 # Default dataset path: one level above this file
-DEFAULT_CSV = Path(__file__).parent.parent / "athar_gig_economy_dataset.csv"
+DEFAULT_CSV = Path(__file__).parent / "athar_gig_economy_dataset.csv"
 
 
 @st.cache_data(show_spinner="Loading dataset…")
