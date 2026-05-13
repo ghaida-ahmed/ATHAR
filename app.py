@@ -265,13 +265,13 @@ with kpi4:
         value=f"{after_quality:.1f}%",
         help="Data quality after preprocessing and handling missing values.",
     )
-    with kpi5:
+
+with kpi5:
     st.metric(
         label="📋 Records",
         value=f"{record_count:,}",
         help="Number of rows in the current filtered view.",
     )
-
 st.divider()
 
 
