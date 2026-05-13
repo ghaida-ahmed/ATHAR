@@ -62,7 +62,7 @@ div[data-testid="metric-container"] {
 }
 /* Insight text */
 .insight-box {
-    background: #f0f7ff;
+    background: linear-gradient(135deg, #f7fbff 0%, #eef7ff 100%);
     border-left: 4px solid #1a6faf;
     padding: 0.6rem 1rem;
     border-radius: 0 8px 8px 0;
@@ -97,9 +97,9 @@ st.markdown("""
 # SECTION 2 — Data source selection
 # ════════════════════════════════════════════════════════════════════════════════
 
-with st.expander("📂 Upload your own CSV dataset (optional)", expanded=False):
+with st.expander("📂 Upload Custom Dataset", expanded=False):
     st.markdown(
-        "Upload a CSV with the following columns: "
+        "For best compatibility, upload a CSV containing the following columns: "
         "`date`, `region`, `search_interest`, `delivery_orders`, "
         "`ride_requests`, `freelance_jobs`, `active_users`, `urban_activity`."
     )
@@ -336,3 +336,21 @@ with st.expander("🔍 View & Download Data", expanded=False):
         file_name="athar_filtered_data.csv",
         mime="text/csv",
     )
+
+
+st.divider()
+
+st.markdown(
+    '''
+    <div style="
+        text-align:center;
+        padding:1rem;
+        color:#6b7280;
+        font-size:0.9rem;
+    ">
+        Built for SW413 — Data Exploration & Visualization Project<br>
+        ATHAR • Digital Observatory for Gig Economy Activity
+    </div>
+    ''',
+    unsafe_allow_html=True
+)
