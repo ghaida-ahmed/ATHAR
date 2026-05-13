@@ -215,7 +215,8 @@ st.subheader("📊 Key Performance Indicators")
 
 avg_gai = round(df["gig_activity_index"].mean(), 1)
 growth_rate = compute_growth_rate(df)
-data_quality = compute_data_quality(df)
+before_quality = compute_data_quality(filtered)
+after_quality = compute_data_quality(df)
 record_count = len(df)
 
 # Show overall summary line
@@ -225,7 +226,7 @@ st.markdown(
 )
 st.markdown("")
 
-kpi1, kpi2, kpi3, kpi4 = st.columns(4)
+kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
 
 with kpi1:
     st.metric(
@@ -253,12 +254,18 @@ with kpi2:
 
 with kpi3:
     st.metric(
-        label="✅ Data Quality",
-        value=f"{data_quality:.1f}%",
-        help="Percentage of numeric cells that are non-null in the current view.",
+        label="⚠️ Quality Before Cleaning",
+        value=f"{before_quality:.1f}%",
+        help="Data quality before preprocessing and cleaning.",
     )
 
 with kpi4:
+    st.metric(
+        label="✅ Quality After Cleaning",
+        value=f"{after_quality:.1f}%",
+        help="Data quality after preprocessing and handling missing values.",
+    )
+    with kpi5:
     st.metric(
         label="📋 Records",
         value=f"{record_count:,}",
