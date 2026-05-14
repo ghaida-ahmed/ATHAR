@@ -44,7 +44,7 @@ def line_chart_insight(df: pd.DataFrame) -> str:
         trend_text = "➡️ Activity is **relatively stable** over the selected period."
 
     return (
-        f"💡 **{top_region}** leads with an average index of **{top_val:.1f}**. "
+        f"**{top_region}** leads with an average index of **{top_val:.1f}**. "
         f"Peak activity of **{peak_val:.1f}** was recorded on "
         f"**{peak_date.strftime('%B %d, %Y')}**. {trend_text}"
     )
@@ -64,7 +64,7 @@ def bar_chart_insight(df: pd.DataFrame) -> str:
     if len(region_avg) < 2:
         top = region_avg.index[0]
         top_val = region_avg.iloc[0]
-        return f"💡 **{top}** is the only region in the current view with an index of **{top_val:.1f}**."
+        return f"**{top}** is the only region in the current view with an index of **{top_val:.1f}**."
 
     top_region = region_avg.index[0]
     top_val = region_avg.iloc[0]
@@ -73,7 +73,7 @@ def bar_chart_insight(df: pd.DataFrame) -> str:
     gap_pct = round((top_val - bot_val) / bot_val * 100, 1) if bot_val > 0 else 0
 
     return (
-        f"💡 **{top_region}** ({top_val:.1f}) leads, outperforming "
+        f"**{top_region}** ({top_val:.1f}) leads, outperforming "
         f"**{bot_region}** ({bot_val:.1f}) by **{gap_pct}%**. "
         f"Larger cities tend to show higher gig activity due to greater "
         f"population density and digital adoption."
@@ -109,7 +109,7 @@ def donut_chart_insight(df: pd.DataFrame) -> str:
     low_pct = round(contributions[low_signal] / total * 100, 1)
 
     return (
-        f"💡 **{top_signal.replace('_', ' ').title()}** is the strongest driver, "
+        f"**{top_signal.replace('_', ' ').title()}** is the strongest driver, "
         f"accounting for **{top_pct}%** of the index weight. "
         f"**{low_signal.replace('_', ' ').title()}** contributes the least "
         f"at **{low_pct}%**."
