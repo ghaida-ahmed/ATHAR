@@ -26,11 +26,19 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import streamlit as st
 import pandas as pd
+import re
 
 from data_loader import load_default, load_uploaded, NUMERIC_COLS
 from preprocessor import preprocess, compute_growth_rate, compute_data_quality
 from charts import make_line_chart, make_bar_chart, make_donut_chart
 from insights import line_chart_insight, bar_chart_insight, donut_chart_insight, overall_summary
+
+
+def format_insight(text: str, title: str = "Insight") -> str:
+    """Convert simple markdown-style insight text into a clean HTML card."""
+    text = str(text).replace("💡", "").strip()
+    text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", text)
+    return f'<div class="insight-box"><span class="insight-title">{title}</span><span class="insight-text">{text}</span></div>'
 
 # ── Page configuration ────────────────────────────────────────────────────────
 st.set_page_config(
@@ -62,14 +70,33 @@ div[data-testid="metric-container"] {
 }
 /* Insight text */
 .insight-box {
-    background: linear-gradient(135deg, #f7fbff 0%, #eef7ff 100%);
-    border-left: 4px solid #1a6faf;
-    padding: 0.6rem 1rem;
-    border-radius: 0 8px 8px 0;
-    margin-top: 0.4rem;
-    font-size: 0.9rem;
-    color: #1a2e4a;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-left: 4px solid #2ea8a0;
+    padding: 1rem 1.1rem;
+    border-radius: 14px;
+    margin-top: 0.75rem;
+    margin-bottom: 1.15rem;
+    color: #f8fafc;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
+.insight-box b {
+    color: #ffffff;
+    font-weight: 700;
+}
+.insight-title {
+    display: block;
+    color: #7dd3fc;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+    font-size: 0.95rem;
+}
+.insight-text {
+    color: #e5e7eb;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -97,9 +124,9 @@ st.markdown("""
 # SECTION 2 — Data source selection
 # ════════════════════════════════════════════════════════════════════════════════
 
-with st.expander("📂 Upload Custom Dataset", expanded=False):
+with st.expander("📂 Upload your own CSV dataset (optional)", expanded=False):
     st.markdown(
-        "For best compatibility, upload a CSV containing the following columns: "
+        "Upload a CSV with the following columns: "
         "`date`, `region`, `search_interest`, `delivery_orders`, "
         "`ride_requests`, `freelance_jobs`, `active_users`, `urban_activity`."
     )
@@ -221,7 +248,7 @@ record_count = len(df)
 
 # Show overall summary line
 st.markdown(
-    f'<div class="insight-box">{overall_summary(df, growth_rate)}</div>',
+    format_insight(overall_summary(df, growth_rate), "Current View Summary"),
     unsafe_allow_html=True,
 )
 st.markdown("")
@@ -282,7 +309,7 @@ st.divider()
 st.subheader("📈 Gig Activity Index Over Time")
 st.plotly_chart(make_line_chart(df), use_container_width=True)
 st.markdown(
-    f'<div class="insight-box">{line_chart_insight(df)}</div>',
+    format_insight(line_chart_insight(df), "Trend Insight"),
     unsafe_allow_html=True,
 )
 
@@ -299,7 +326,7 @@ with col_left:
     st.subheader("🗺️ Regional Comparison")
     st.plotly_chart(make_bar_chart(df), use_container_width=True)
     st.markdown(
-        f'<div class="insight-box">{bar_chart_insight(df)}</div>',
+        format_insight(bar_chart_insight(df), "Regional Insight"),
         unsafe_allow_html=True,
     )
 
@@ -307,7 +334,7 @@ with col_right:
     st.subheader("🔢 Signal Contribution")
     st.plotly_chart(make_donut_chart(df), use_container_width=True)
     st.markdown(
-        f'<div class="insight-box">{donut_chart_insight(df)}</div>',
+        format_insight(donut_chart_insight(df), "Signal Insight"),
         unsafe_allow_html=True,
     )
 
@@ -336,21 +363,3 @@ with st.expander("🔍 View & Download Data", expanded=False):
         file_name="athar_filtered_data.csv",
         mime="text/csv",
     )
-
-
-st.divider()
-
-st.markdown(
-    '''
-    <div style="
-        text-align:center;
-        padding:1rem;
-        color:#6b7280;
-        font-size:0.9rem;
-    ">
-        Built for SW413 — Data Exploration & Visualization Project<br>
-        ATHAR • Digital Observatory for Gig Economy Activity
-    </div>
-    ''',
-    unsafe_allow_html=True
-)
